@@ -1,1 +1,0 @@
-Create projects for this lesson here.
