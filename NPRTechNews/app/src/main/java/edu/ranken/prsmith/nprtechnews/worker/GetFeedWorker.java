@@ -120,6 +120,8 @@ public class GetFeedWorker extends Worker {
                 .setSmallIcon(R.drawable.npr)
                 .setContentIntent(contentIntent)
                 .setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .build();
 
         // show notification now
