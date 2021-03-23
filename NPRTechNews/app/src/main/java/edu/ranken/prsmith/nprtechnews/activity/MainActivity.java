@@ -14,6 +14,7 @@ import edu.ranken.prsmith.nprtechnews.model.Feed;
 import edu.ranken.prsmith.nprtechnews.model.NprDataSource;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String LOG_TAG = "NPRTechNews";
 
     // views
     private RecyclerView recyclerView;

@@ -8,7 +8,7 @@ public class Story implements Serializable {
     public String url;
     public String title;
     public String summary;
-    public String date_published;
-    public Author author;
-    public ArrayList<String> tags;
+    public String date_published; // optional
+    public Author author; // optional
+    public ArrayList<String> tags; // optional
 }
