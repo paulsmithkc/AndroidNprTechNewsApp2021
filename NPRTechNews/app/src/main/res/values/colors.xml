@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
@@ -7,4 +8,18 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!--
+    NPR LOGO https://media.npr.org/images/stations/nprone_logos/npr.png
+    Material Color Tool https://material.io/resources/color/#!/?primary.color=D32F2F&secondary.color=2979ff
+    -->
+    <color name="primaryColor">#d62021</color>
+    <color name="primaryLightColor">#ff5d4b</color>
+    <color name="primaryDarkColor">#9c0000</color>
+    <color name="secondaryColor">#237bbd</color>
+    <color name="secondaryLightColor">#63aaf0</color>
+    <color name="secondaryDarkColor">#004f8c</color>
+    <color name="primaryTextColor">#ffffff</color>
+    <color name="secondaryTextColor">#ffffff</color>
+
 </resources>

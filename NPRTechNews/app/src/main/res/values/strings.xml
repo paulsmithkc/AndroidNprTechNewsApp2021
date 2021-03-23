@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">NPR Tech News</string>
+    <string name="notification_new_story_channel_name">New Story</string>
+    <string name="notification_new_story_channel_description">Notifications about new stories are sent to this channel.</string>
 </resources>
