@@ -113,16 +113,24 @@ public class GetFeedWorker extends Worker {
         // get the newest story
         Story story = feed.items.get(0);
 
+        // configure style
+        NotificationCompat.Style style =
+            new NotificationCompat.BigTextStyle()
+                .setBigContentTitle(story.title)
+                .setSummaryText(story.summary)
+                .bigText("\n" + story.summary);
+
         // build notification
         Notification notification =
             new NotificationCompat.Builder(context, NprApp.NEW_STORY_NOTIFICATION_CHANNEL_ID)
-                .setContentTitle(story.title)
-                .setContentText(story.summary)
+                .setContentTitle(story.title) // MUST BE SET FOR COMPATIBILITY
+                .setContentText(story.summary) // MUST BE SET FOR COMPATIBILITY
                 .setSmallIcon(R.drawable.npr)
                 .setContentIntent(contentIntent)
                 .setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
+                .setStyle(style)
                 .build();
 
         // show notification now
