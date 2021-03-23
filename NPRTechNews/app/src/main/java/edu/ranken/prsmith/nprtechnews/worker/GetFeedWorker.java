@@ -74,6 +74,7 @@ public class GetFeedWorker extends Worker {
                     } else if (Objects.equals(newData.items.get(0).id, oldData.items.get(0).id)) {
                         // nothing changed
                         Log.i(LOG_TAG, "nothing new");
+                        dataSource.setFeed(newData);
                     } else {
                         // new fortune, update and send notification
                         Log.i(LOG_TAG, "new story!");
