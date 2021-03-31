@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,11 +32,13 @@ public class StoryListAdapter extends RecyclerView.Adapter<StoryViewHolder> {
     private ArrayList<Story> items;
     private Context context;
     private LayoutInflater layoutInflater;
+    private Picasso picasso;
 
     public StoryListAdapter(Context context, ArrayList<Story> items) {
         this.items = items;
         this.context = context;
         this.layoutInflater = LayoutInflater.from(context);
+        this.picasso = Picasso.get();
     }
 
     public void setItems(ArrayList<Story> items) {
@@ -58,6 +62,7 @@ public class StoryListAdapter extends RecyclerView.Adapter<StoryViewHolder> {
         vh.author = itemView.findViewById(R.id.item_story_author);
         vh.date_published = itemView.findViewById(R.id.item_story_published);
         vh.tags = itemView.findViewById(R.id.item_story_tags);
+        vh.image = itemView.findViewById(R.id.item_story_image);
 
         itemView.setOnClickListener((View v) -> {
             Story item = items.get(vh.getAdapterPosition());
@@ -99,6 +104,22 @@ public class StoryListAdapter extends RecyclerView.Adapter<StoryViewHolder> {
         } else {
             vh.tags.setText("");
             vh.tags.setVisibility(View.GONE);
+        }
+
+        String imageUrl = item.image;
+        if (imageUrl != null) {
+            vh.image.setVisibility(View.VISIBLE);
+            picasso
+                .load(imageUrl)
+                .placeholder(R.drawable.ic_downloading)
+                .error(R.drawable.ic_error)
+                //.resize(1000, 1000)
+                .resizeDimen(R.dimen.item_story_image_resize, R.dimen.item_story_image_resize)
+                .centerInside()
+                .into(vh.image);
+        } else {
+            vh.image.setVisibility(View.GONE);
+            vh.image.setImageResource(R.drawable.ic_error);
         }
     }
 

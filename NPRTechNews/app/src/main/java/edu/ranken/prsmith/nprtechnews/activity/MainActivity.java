@@ -3,6 +3,7 @@ package edu.ranken.prsmith.nprtechnews.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.work.OneTimeWorkRequest;
@@ -52,7 +53,10 @@ public class MainActivity extends AppCompatActivity {
 
         // init recycler view
         adapter = new StoryListAdapter(this, null);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new GridLayoutManager(
+            this,
+            this.getResources().getInteger(R.integer.item_story_grid_cols)
+        ));
         recyclerView.setAdapter(adapter);
 
         // init adapter

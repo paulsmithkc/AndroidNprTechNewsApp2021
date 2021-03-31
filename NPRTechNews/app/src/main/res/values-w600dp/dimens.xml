@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="item_story_grid_cols">2</integer>
+    <dimen name="item_story_image_width">0dp</dimen>
+    <dimen name="item_story_image_height">200dp</dimen>
+    <dimen name="item_story_image_resize">1000dp</dimen>
+</resources>

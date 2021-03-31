@@ -14,6 +14,17 @@
         android:layout_height="match_parent"
         android:layout_margin="8dp">
 
+        <ImageView
+            android:id="@+id/item_story_image"
+            android:layout_width="@dimen/item_story_image_width"
+            android:layout_height="@dimen/item_story_image_height"
+            android:adjustViewBounds="false"
+            android:scaleType="fitCenter"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_downloading" />
+
         <TextView
             android:id="@+id/item_story_title"
             android:layout_width="0dp"
@@ -22,7 +33,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/item_story_image"
             tools:text="TITLE" />
 
         <TextView

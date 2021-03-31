@@ -46,7 +46,7 @@ public class GetFeedWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        Log.i(LOG_TAG, "checking for new fortune");
+        Log.i(LOG_TAG, "checking for new stories");
         HttpURLConnection connection = null;
         try {
             URL url = new URL(BASE_URL);
