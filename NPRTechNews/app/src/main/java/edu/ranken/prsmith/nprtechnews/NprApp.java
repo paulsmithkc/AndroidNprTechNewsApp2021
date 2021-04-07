@@ -13,9 +13,13 @@ import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
+
 import java.util.concurrent.TimeUnit;
 
 import edu.ranken.prsmith.nprtechnews.model.NprDataSource;
+import edu.ranken.prsmith.nprtechnews.worker.GetFeedWithVolleyWorker;
 import edu.ranken.prsmith.nprtechnews.worker.GetFeedWorker;
 
 public class NprApp extends Application {
@@ -25,12 +29,14 @@ public class NprApp extends Application {
     public static final int NEW_STORY_NOTIFICATION_ID = 2;
 
     private NprDataSource dataSource;
+    private RequestQueue requestQueue;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
         dataSource = new NprDataSource();
+        requestQueue = Volley.newRequestQueue(this);
 
         createNotificationChannels();
         enqueueWorkers();
@@ -38,6 +44,10 @@ public class NprApp extends Application {
 
     public NprDataSource getDataSource() {
         return dataSource;
+    }
+
+    public RequestQueue getRequestQueue() {
+        return requestQueue;
     }
 
     private void createNotificationChannels() {
@@ -65,7 +75,7 @@ public class NprApp extends Application {
                 .build();
 
         PeriodicWorkRequest watchFortuneRequest =
-            new PeriodicWorkRequest.Builder(GetFeedWorker.class, 15, TimeUnit.MINUTES)
+            new PeriodicWorkRequest.Builder(GetFeedWithVolleyWorker.class, 15, TimeUnit.MINUTES)
                 .setConstraints(watchFortuneConstraints)
                 .setInitialDelay(1, TimeUnit.SECONDS)
                 .build();

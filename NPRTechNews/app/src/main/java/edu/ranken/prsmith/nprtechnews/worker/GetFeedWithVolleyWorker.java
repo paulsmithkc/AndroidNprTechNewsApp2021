@@ -8,10 +8,16 @@ import android.content.Intent;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.concurrent.futures.CallbackToFutureAdapter;
 import androidx.core.app.NotificationCompat;
+import androidx.work.ListenableWorker;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
+import com.google.common.util.concurrent.ListenableFuture;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
@@ -24,82 +30,69 @@ import java.net.URL;
 import java.util.Objects;
 
 import edu.ranken.prsmith.nprtechnews.NprApp;
-import edu.ranken.prsmith.nprtechnews.activity.MainActivity;
 import edu.ranken.prsmith.nprtechnews.R;
+import edu.ranken.prsmith.nprtechnews.activity.MainActivity;
 import edu.ranken.prsmith.nprtechnews.model.Feed;
 import edu.ranken.prsmith.nprtechnews.model.NprDataSource;
 import edu.ranken.prsmith.nprtechnews.model.Story;
+import edu.ranken.prsmith.nprtechnews.request.GsonRequest;
 
-public class GetFeedWorker extends Worker {
+public class GetFeedWithVolleyWorker extends ListenableWorker {
     private static final String LOG_TAG = "NPRTechNews";
     private static final String BASE_URL = "https://feeds.npr.org/1019/feed.json";
 
     private NprApp app;
     private NprDataSource dataSource;
+    private RequestQueue requestQueue;
 
-    public GetFeedWorker(@NonNull Context context, @NonNull WorkerParameters params) {
+    public GetFeedWithVolleyWorker(@NonNull Context context, @NonNull WorkerParameters params) {
         super(context, params);
         app = (NprApp) context;
         dataSource = app.getDataSource();
+        requestQueue = app.getRequestQueue();
     }
 
     @NonNull
     @Override
-    public Result doWork() {
-        Log.i(LOG_TAG, "checking for new stories");
-        HttpURLConnection connection = null;
-        try {
-            URL url = new URL(BASE_URL);
+    public ListenableFuture<Result> startWork() {
+        return CallbackToFutureAdapter.getFuture(resolver -> {
+            Request request = new GsonRequest<Feed>(
+                Request.Method.GET,
+                BASE_URL,
+                Feed.class,
+                null,
+                null,
+                (Feed feed) -> {
+                    processFeed(feed);
+                    resolver.set(Result.success());
 
-            // connect
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setConnectTimeout(60_000);
-            connection.setReadTimeout(15_000);
-            connection.setRequestMethod("GET");
-            connection.setDoInput(true);
-            connection.connect();
-
-            // read and parse response
-            try (InputStream stream = connection.getInputStream()) {
-                try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream))) {
-                    Gson gson = new Gson();
-                    Feed newData = gson.fromJson(reader, Feed.class);
-
-                    // is this new data?
-                    Feed oldData = dataSource.getFeed();
-                    if (oldData == null) {
-                        // first time reading the feed
-                        Log.i(LOG_TAG, "feed initialized");
-                        dataSource.setFeed(newData);
-                    } else if (Objects.equals(newData.items.get(0).id, oldData.items.get(0).id)) {
-                        // nothing changed
-                        Log.i(LOG_TAG, "nothing new");
-                        dataSource.setFeed(newData);
-                    } else {
-                        // new story, update and send notification
-                        Log.i(LOG_TAG, "new story!");
-                        dataSource.setFeed(newData);
-                        showNewStoryNotification(getApplicationContext(), newData);
-                    }
+                },
+                (VolleyError error) -> {
+                    Log.e(LOG_TAG, "error getting news feed", error);
+                    resolver.set(Result.retry());
                 }
-            }
+            );
+            requestQueue.add(request);
+            return request;
+        });
+    }
 
-            // success
-            return Result.success();
-
-        } catch (MalformedURLException ex) {
-            Log.i(LOG_TAG, "error getting news feed, failed due to bad url", ex);
-            return Result.failure();
-        } catch (IOException ex) {
-            Log.i(LOG_TAG, "error getting news feed, retrying due to IO error", ex);
-            return Result.retry();
-        } catch (Exception ex) {
-            Log.i(LOG_TAG, "error getting news feed, failed for other reason", ex);
-            return Result.failure();
-        } finally {
-            if (connection != null) {
-                connection.disconnect();
-            }
+    private void processFeed(Feed newData) {
+        // is this new data?
+        Feed oldData = dataSource.getFeed();
+        if (oldData == null) {
+            // first time reading the feed
+            Log.i(LOG_TAG, "feed initialized");
+            dataSource.setFeed(newData);
+        } else if (Objects.equals(newData.items.get(0).id, oldData.items.get(0).id)) {
+            // nothing changed
+            Log.i(LOG_TAG, "nothing new");
+            dataSource.setFeed(newData);
+        } else {
+            // new story, update and send notification
+            Log.i(LOG_TAG, "new story!");
+            dataSource.setFeed(newData);
+            showNewStoryNotification(getApplicationContext(), newData);
         }
     }
 

@@ -24,6 +24,7 @@ import edu.ranken.prsmith.nprtechnews.R;
 import edu.ranken.prsmith.nprtechnews.adapter.StoryListAdapter;
 import edu.ranken.prsmith.nprtechnews.model.Feed;
 import edu.ranken.prsmith.nprtechnews.model.NprDataSource;
+import edu.ranken.prsmith.nprtechnews.worker.GetFeedWithVolleyWorker;
 import edu.ranken.prsmith.nprtechnews.worker.GetFeedWorker;
 
 public class MainActivity extends AppCompatActivity {
@@ -88,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                     WorkManager workManager = WorkManager.getInstance(this);
 
                     OneTimeWorkRequest workRequest =
-                        new OneTimeWorkRequest.Builder(GetFeedWorker.class)
+                        new OneTimeWorkRequest.Builder(GetFeedWithVolleyWorker.class)
                             .build();
 
                     workManager.enqueue(workRequest);
