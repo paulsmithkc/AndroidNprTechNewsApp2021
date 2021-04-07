@@ -11,22 +11,13 @@ import androidx.annotation.NonNull;
 import androidx.concurrent.futures.CallbackToFutureAdapter;
 import androidx.core.app.NotificationCompat;
 import androidx.work.ListenableWorker;
-import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.google.common.util.concurrent.ListenableFuture;
-import com.google.gson.Gson;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Objects;
 
 import edu.ranken.prsmith.nprtechnews.NprApp;
