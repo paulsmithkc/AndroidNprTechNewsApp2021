@@ -63,6 +63,7 @@ public class GetFeedWithVolleyWorker extends ListenableWorker {
                     resolver.set(Result.retry());
                 }
             );
+
             requestQueue.add(request);
             return request;
         });

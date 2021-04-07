@@ -17,7 +17,7 @@ import java.util.Collections;
 import java.util.Map;
 
 public class GsonRequest<T> extends Request<T> {
-    private static final String LOG_TAG = GsonRequest.class.getSimpleName();
+    private static final String LOG_TAG = "NPRTechNews";
 
     private final Gson gson = new Gson();
     private final Class<T> clazz;
